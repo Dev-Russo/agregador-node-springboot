@@ -7,7 +7,7 @@ import br.ufv.sin142.aggregadornode.service.AggregationService;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/aggregator")
 public class AggregatorController {
