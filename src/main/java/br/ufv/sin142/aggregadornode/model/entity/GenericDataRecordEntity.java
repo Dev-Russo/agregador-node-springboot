@@ -1,14 +1,11 @@
 package br.ufv.sin142.aggregadornode.model.entity; // ou model.entity
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Index;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "generic_data_records", indexes = { // Adicionando índices para otimizar consultas
@@ -22,9 +19,10 @@ public class GenericDataRecordEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Chave primária auto-incrementada
 
-    private String dataType; // Ex: "votacao_api", "iot"
-    private String objectIdentifier; // Ex: id_candidato_A, nome_da_cidade_X
+    private String dataType;
+    private String objectIdentifier;
     private double valor;
-    private long eventDatetime; // Renomeado para clareza com datetime do Java
-    private String batchId; // Para rastrear a origem do lote
+    @Column(name = "event_datetime", columnDefinition = "TIMESTAMP")
+    private LocalDateTime eventDatetime;
+    private String batchId;
 }

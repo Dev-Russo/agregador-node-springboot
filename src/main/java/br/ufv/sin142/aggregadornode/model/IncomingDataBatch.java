@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IncomingDataBatch {
-    private String batchId;      // ID único para este lote de dados
-    private String sourceNodeId; // ID do nó coletor que enviou este lote
-    private List<GenericDataItem> dataPoints; // Lista dos itens de dados no lote
+    private String batchId;
+    private String sourceNodeId;
+    private List<GenericDataItem> dataPoints;
 }

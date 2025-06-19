@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -18,7 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             // Desabilita CSRF, pois não usaremos sessões baseadas em formulários/cookies
-            .csrf(csrf -> csrf.disable())
+            .csrf(AbstractHttpConfigurer::disable)
 
             // Define a política de sessão como STATELESS, ideal para APIs
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -34,7 +35,9 @@ public class SecurityConfig {
                 // Permite que qualquer um consulte os resultados agregados
                 .requestMatchers(HttpMethod.GET, "/api/aggregator/results").permitAll()
 
-                // Nega qualquer outra requisição que não foi explicitamente permitida
+                .requestMatchers("/ws/**").permitAll()
+
+                    // Nega qualquer outra requisição que não foi explicitamente permitida
                 .anyRequest().denyAll()
             )
 

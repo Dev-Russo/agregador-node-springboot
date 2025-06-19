@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 //@Component // Marca esta classe para ser gerenciada pelo Spring
 public class DatabaseTestRunner implements CommandLineRunner {
 
@@ -42,10 +44,11 @@ public class DatabaseTestRunner implements CommandLineRunner {
         try {
             GenericDataRecordEntity testRecord = new GenericDataRecordEntity();
             // testRecord.setId(null); // O ID é auto-gerado, não precisa setar
+            LocalDateTime agora = LocalDateTime.now();
             testRecord.setDataType("teste_tipo");
             testRecord.setObjectIdentifier("teste_objeto_id");
             testRecord.setValor(123.45);
-            testRecord.setEventDatetime(System.currentTimeMillis());
+            testRecord.setEventDatetime(agora);
             testRecord.setBatchId("TEST_BATCH_001"); // Pode relacionar com o lote de teste
 
             GenericDataRecordEntity savedRecord = genericDataRecordRepository.save(testRecord);
