@@ -2,7 +2,6 @@ package br.ufv.sin142.aggregadornode.component;
 
 import br.ufv.sin142.aggregadornode.model.IncomingDataBatch;
 import br.ufv.sin142.aggregadornode.service.AggregationService;
-import br.ufv.sin142.aggregadornode.websocket.Publisher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,10 +23,9 @@ public class MessageListener {
     private Publisher publisher;
 
     @RabbitListener(queues = "${rabbitmq.queue.name}")
-    public void receiveMessage(String messageBody) {
+    public void receiveMessage(IncomingDataBatch batch) {
         logger.info(">>> MENSAGEM RECEBIDA DA FILA RABBITMQ! <<<");
         try {
-            IncomingDataBatch batch = objectMapper.readValue(messageBody, IncomingDataBatch.class);
             aggregationService.processDataBatch(batch);
             publisher.publicar();
             logger.info("Dados atualizados publicados na fila");

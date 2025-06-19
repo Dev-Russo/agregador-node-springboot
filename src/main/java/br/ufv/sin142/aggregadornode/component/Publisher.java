@@ -1,9 +1,8 @@
-package br.ufv.sin142.aggregadornode.websocket;
+package br.ufv.sin142.aggregadornode.component;
 
 import br.ufv.sin142.aggregadornode.model.OverallAggregatedResults;
 import br.ufv.sin142.aggregadornode.service.AggregationService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,7 +11,7 @@ public class Publisher {
     private final AggregationService aggregationService;
     private final RabbitTemplate rabbitTemplate;
 
-    public Publisher(@Lazy AggregationService aggregationService, RabbitTemplate rabbitTemplate) {
+    public Publisher(AggregationService aggregationService, RabbitTemplate rabbitTemplate) {
         this.aggregationService = aggregationService;
         this.rabbitTemplate = rabbitTemplate;
 
