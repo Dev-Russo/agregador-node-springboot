@@ -18,30 +18,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // Desabilita CSRF, pois não usaremos sessões baseadas em formulários/cookies
-            .csrf(AbstractHttpConfigurer::disable)
-
-            // Define a política de sessão como STATELESS, ideal para APIs
+            .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-            // Define as regras de autorização para cada endpoint
+            // BLOCO CORRIGIDO ABAIXO
             .authorizeHttpRequests(authz -> authz
-                // Permite acesso público ao healthcheck para o Docker
-                .requestMatchers("/actuator/health").permitAll()
-                
-                // Protege todos os outros endpoints do Actuator com a role ADMIN
-                .requestMatchers("/actuator/**").hasRole("ADMIN")
-                
-                // Permite que qualquer um consulte os resultados agregados
+                // 1. Libera o healthcheck, os resultados e o websocket para todos
                 .requestMatchers(HttpMethod.GET, "/api/aggregator/results").permitAll()
-
                 .requestMatchers("/ws/**").permitAll()
-
-                    // Nega qualquer outra requisição que não foi explicitamente permitida
-                .anyRequest().denyAll()
+                .requestMatchers("/actuator/health").permitAll()
+                // 2. Protege o resto do actuator para admins
+                .requestMatchers("/actuator/**").hasRole("ADMIN")
+                // 3. Qualquer outra requisição é negada
+                .anyRequest().authenticated() // Usar authenticated() aqui é um pouco mais flexível que denyAll()
             )
-
-            // Habilita a Autenticação Básica HTTP para os endpoints protegidos
             .httpBasic(withDefaults());
 
         return http.build();
