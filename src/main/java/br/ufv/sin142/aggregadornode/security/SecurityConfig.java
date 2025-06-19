@@ -16,28 +16,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Desabilitar CSRF (padrão para APIs stateless)
-            .csrf(csrf -> csrf.disable())
-            
-            // 2. Configurar a política de sessão para ser stateless
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            
-            // 3. Definir as regras de autorização para as requisições HTTP
-            .authorizeHttpRequests(auth -> auth
-                // Regras de liberação explícita (permitAll)
-                .requestMatchers(HttpMethod.GET, "/api/aggregator/results").permitAll()
-                .requestMatchers("/ws/**").permitAll()
-                .requestMatchers("/actuator/health").permitAll()
-                
-                // Regra de proteção para Admin
-                .requestMatchers("/actuator/**").hasRole("ADMIN")
-                
-                // Qualquer outra requisição não listada acima deve ser autenticada
-                .anyRequest().authenticated()
-            )
-            
-            // 4. Habilitar o popup de autenticação básica HTTP
-            .httpBasic(withDefaults());
+                .csrf(csrf -> csrf.disable()) // Desabilita CSRF, comum em APIs REST
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Configura a gestão de sessão para ser sem estado
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.GET).permitAll() // Permite todas as requisições GET
+                        .anyRequest().authenticated() // Exige autenticação para todas as outras requisições
+                )
+                .httpBasic(httpBasic -> {}); // Habilita autenticação básica para as rotas protegidas
 
         return http.build();
     }
