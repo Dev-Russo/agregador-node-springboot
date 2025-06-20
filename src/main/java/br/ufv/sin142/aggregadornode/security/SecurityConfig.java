@@ -28,7 +28,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/aggregator/results").permitAll()
                 .requestMatchers("/ws/**").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
-                .requestMatchers("/actuator/**").hasRole("ADMIN") // Esta regra precisa de um usuário com a role ADMIN
+                .requestMatchers("/actuator/prometheus").permitAll()
+                .requestMatchers("/actuator/**").hasRole("ADMIN") 
                 .anyRequest().authenticated()
             )
             .httpBasic(withDefaults());
