@@ -36,6 +36,7 @@ public class AggregationService {
     private static final Logger logger = LogManager.getLogger(AggregationService.class);
 
     @Transactional
+    @CacheEvict(value = "resultados", allEntries = true) 
     public void processDataBatch(IncomingDataBatch batch) {
         if (batch == null || batch.getBatchId() == null || batch.getBatchId().trim().isEmpty() ||
             batch.getDataPoints() == null) {
@@ -69,8 +70,9 @@ public class AggregationService {
         logger.info("Lote {}", batch.getBatchId() + " da fila processado e salvo no banco com sucesso.");
     }
 
-    @Cacheable("resultados")
+    
     @Transactional(readOnly = true)
+    @Cacheable("resultados")
     public OverallAggregatedResults getAggregatedResults() {
         List<GenericDataRecordEntity> allRecords = genericDataRecordRepository.findAll();
 
