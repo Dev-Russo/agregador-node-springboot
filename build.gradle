@@ -24,6 +24,7 @@ repositories {
 }
 
 dependencies {
+	// Para cada 'implementation' do Spring Boot, adicionamos o bloco 'exclude'
 	implementation('org.springframework.boot:spring-boot-starter-web') {
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 	}
@@ -39,20 +40,24 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-amqp') {
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 	}
-
 	implementation('org.springframework.boot:spring-boot-starter-websocket'){
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 	}
+    // LINHA CORRIGIDA ABAIXO
+	implementation('org.springframework.boot:spring-boot-starter-cache') {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
 
-	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	// Adicionamos o Log4j2 como o único sistema de log
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-
-
+	
+    // Resto das suas dependências
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
-	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    // A dependência do micrometer deve ser 'implementation' para o Actuator encontrá-la
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
